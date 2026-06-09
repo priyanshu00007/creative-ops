@@ -2,9 +2,6 @@
 
 An award-winning, world-class creative branding agency website built with **React 19**, **React Router v7**, **Framer Motion**, and **Tailwind CSS v4**. This project delivers a sophisticated, editorial, and luxurious digital experience that communicates authority, creativity, and world-class execution.
 
-> *"We don't make designs. We build iconic brands."*
-
----
 
 ## ✨ Features
 
