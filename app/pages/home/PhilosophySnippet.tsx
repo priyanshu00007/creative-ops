@@ -1,8 +1,8 @@
+import { useNavigate } from 'react-router';
 import { ArrowUpRight } from 'lucide-react';
-import { useRouter } from '~/contexts/RouterContext';
 
 export function PhilosophySnippet() {
-  const { navigate } = useRouter();
+  const navigate = useNavigate();
 
   return (
     <section className="py-32 md:py-48 px-6 md:px-12 bg-[#F8F8F6] text-[#000000] relative rounded-t-[2rem] -mt-8 z-20">
@@ -19,7 +19,7 @@ export function PhilosophySnippet() {
             Every pixel is curated. Every interaction is intentional. We blend strategic thinking with world-class craftsmanship to create premium digital experiences that elevate category leaders.
           </p>
           <button
-            onClick={() => navigate('agency')}
+            onClick={() => navigate('/agency')}
             className="mt-12 flex items-center gap-4 border-b border-black pb-2 group font-sans text-sm tracking-widest uppercase font-bold"
           >
             Discover our methodology <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />

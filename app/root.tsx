@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   isRouteErrorResponse,
   Links,
@@ -5,9 +6,17 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLocation,
 } from "react-router";
+import { AnimatePresence, motion } from "framer-motion";
 
 import type { Route } from "./+types/root";
+import { CursorProvider } from "~/contexts/CursorContext";
+import { CustomCursor } from "~/components/CustomCursor";
+import { Navbar } from "~/components/Navbar";
+import { Footer } from "~/components/Footer";
+import { Loader } from "~/components/Loader";
+import { ease } from "~/components/AnimatedText";
 import "./app.css";
 
 export const links: Route.LinksFunction = () => [
@@ -46,7 +55,36 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  const [loaded, setLoaded] = useState(false);
+  const location = useLocation();
+
+  return (
+    <>
+      {!loaded && <Loader onComplete={() => setLoaded(true)} />}
+      {loaded && (
+        <CursorProvider>
+          <div className="bg-[#000000] min-h-screen text-[#F8F8F6] font-sans selection:bg-[#5B1D1D] selection:text-white">
+            <CustomCursor />
+            <Navbar />
+            <main>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={location.pathname}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5, ease }}
+                >
+                  <Outlet />
+                </motion.div>
+              </AnimatePresence>
+            </main>
+            {location.pathname !== "/contact" && <Footer />}
+          </div>
+        </CursorProvider>
+      )}
+    </>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

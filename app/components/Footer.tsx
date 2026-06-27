@@ -1,10 +1,10 @@
+import { useNavigate } from 'react-router';
 import { motion } from 'framer-motion';
-import { useRouter } from '~/contexts/RouterContext';
 import { MagneticElement } from '~/components/MagneticElement';
 import { ease } from '~/components/AnimatedText';
 
 export function Footer() {
-  const { navigate } = useRouter();
+  const navigate = useNavigate();
 
   return (
     <footer className="bg-[#000000] text-[#F8F8F6] pt-32 md:pt-48 pb-12 px-6 md:px-12 relative z-20">
@@ -24,7 +24,7 @@ export function Footer() {
 
           <MagneticElement>
             <button
-              onClick={() => navigate('contact')}
+              onClick={() => navigate('/contact')}
               className="bg-[#F8F8F6] text-black px-12 py-6 rounded-full font-sans text-sm uppercase tracking-widest font-bold hover:bg-[#5B1D1D] hover:text-white transition-colors"
             >
               Start a Project

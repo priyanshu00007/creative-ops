@@ -1,25 +1,26 @@
 import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { useCursor } from '~/contexts/CursorContext';
-import { useRouter } from '~/contexts/RouterContext';
 import { MagneticElement } from '~/components/MagneticElement';
 import { ease } from '~/components/AnimatedText';
 
 const navLinks = [
-  { name: 'Home', id: 'home', img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80' },
-  { name: 'Work', id: 'work', img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1000&q=80' },
-  { name: 'Agency', id: 'agency', img: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=1000&q=80' },
-  { name: 'Services', id: 'services', img: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=1000&q=80' },
-  { name: 'Pricing', id: 'pricing', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=80' },
-  { name: 'Contact', id: 'contact', img: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1000&q=80' },
+  { name: 'Home', id: 'home', path: '/', img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80' },
+  { name: 'Work', id: 'work', path: '/work', img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1000&q=80' },
+  { name: 'Agency', id: 'agency', path: '/agency', img: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=1000&q=80' },
+  { name: 'Services', id: 'services', path: '/services', img: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=1000&q=80' },
+  { name: 'Pricing', id: 'pricing', path: '/pricing', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=80' },
+  { name: 'Contact', id: 'contact', path: '/contact', img: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1000&q=80' },
 ];
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const { setCursorVariant } = useCursor();
-  const { navigate, currentPage } = useRouter();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const originalOverflow = document.body.style.overflow;
@@ -31,10 +32,12 @@ export function Navbar() {
     return () => { document.body.style.overflow = originalOverflow || ''; };
   }, [isOpen]);
 
-  const handleNav = (id: string) => {
-    navigate(id);
+  const handleNav = (path: string) => {
+    navigate(path);
     setIsOpen(false);
   };
+
+  const isActive = (path: string) => location.pathname === path;
 
   return (
     <>
@@ -42,7 +45,7 @@ export function Navbar() {
         <MagneticElement>
           <div
             className="font-sans text-sm font-bold tracking-widest uppercase cursor-pointer relative z-50"
-            onClick={() => navigate('home')}
+            onClick={() => navigate('/')}
             onMouseEnter={() => setCursorVariant('hidden')}
             onMouseLeave={() => setCursorVariant('default')}
           >
@@ -97,14 +100,14 @@ export function Navbar() {
               {navLinks.map((item, i) => (
                 <div key={item.id} className="overflow-hidden">
                   <motion.button
-                    onClick={() => handleNav(item.id)}
+                    onClick={() => handleNav(item.path)}
                     onMouseEnter={() => setHoveredLink(item.id)}
                     onMouseLeave={() => setHoveredLink(null)}
                     initial={{ y: '100%' }}
                     animate={{ y: 0 }}
                     transition={{ delay: 0.3 + (i * 0.1), duration: 0.8, ease }}
                     className={`font-editorial text-5xl md:text-[7vw] leading-[1] transition-colors inline-block text-left
-                      ${currentPage === item.id ? 'text-[#5B1D1D] italic' : 'hover:text-[#5B1D1D] hover:italic'}
+                      ${isActive(item.path) ? 'text-[#5B1D1D] italic' : 'hover:text-[#5B1D1D] hover:italic'}
                     `}
                   >
                     {item.name}
@@ -120,7 +123,7 @@ export function Navbar() {
               </div>
               <div className="md:text-right">
                 <p>New York — London</p>
-                <p className="mt-2 text-gray-500">©2026 All Rights Reserved</p>
+                <p className="mt-2 text-gray-500">&copy;2026 All Rights Reserved</p>
               </div>
             </div>
           </motion.div>
